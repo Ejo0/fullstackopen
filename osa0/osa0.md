@@ -10,4 +10,4 @@
 
 ## 0.6: Uusi muistiinpano (SPA)
 
-![press_save_spa](osa0/press_save_spa.png)
+![press_save_spa](images/press_save_spa.png)
