@@ -7,7 +7,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>give feedback</h1>
+      <h1>Give feedback</h1>
       <Button
         clickHandler={() => setGood(good + 1)}
         text="good"
@@ -20,11 +20,7 @@ const App = () => {
         clickHandler={() => setBad(bad + 1)}
         text="bad"
       />
-      <h1>statistics</h1>
-      
-      good {good}<br></br>
-      neutral {neutral}<br></br>
-      bad {bad}
+      <h1>Statistics</h1>
       <Statistics
         good={good}
         neutral={neutral}
@@ -40,14 +36,16 @@ const Button = ({clickHandler, text}) => (
 
 const Statistics =({good, neutral, bad}) => {
   const all = good + neutral + bad
-  let average = 0
-  let positive = 0
-  if (all != 0) {
-    average = (good - bad) / all
-    positive = good * 100 / all
+  if (all === 0) {
+    return <div>No feedback given</div>
   }
+  const average = (good - bad) / all
+  const positive = good * 100 / all
   return (
     <div>
+      good {good}<br></br>
+      neutral {neutral}<br></br>
+      bad {bad}<br></br>
       all {all}<br></br>
       average {average}<br></br>
       positive {positive} %<br></br>
