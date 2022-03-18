@@ -39,20 +39,27 @@ const Statistics =({good, neutral, bad}) => {
   if (all === 0) {
     return <div>No feedback given</div>
   }
-  const average = (good - bad) / all
-  const positive = (good * 100 / all) + " %"
+  const average = ((good - bad) / all).toFixed(2)
+  const positive = (good * 100 / all).toFixed(2) + " %"
   return (
-    <div>
-      <StatisticLine text="good" value={good}/>
-      <StatisticLine text="neutral" value={neutral}/>
-      <StatisticLine text="bad" value={bad}/>
-      <StatisticLine text="all" value={all}/>
-      <StatisticLine text="average" value={average}/>
-      <StatisticLine text="positive" value={positive}/>
-    </div>
+    <table>
+      <tbody>
+        <StatisticLine text="good" value={good}/>
+        <StatisticLine text="neutral" value={neutral}/>
+        <StatisticLine text="bad" value={bad}/>
+        <StatisticLine text="all" value={all}/>
+        <StatisticLine text="average" value={average}/>
+        <StatisticLine text="positive" value={positive}/>
+      </tbody>
+    </table>
   )
 }
 
-const StatisticLine = ({text, value}) => <div>{text} {value}</div>
+const StatisticLine = ({text, value}) => (
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
+)
 
 export default App;
