@@ -21,18 +21,38 @@ const App = () => {
         text="bad"
       />
       <h1>statistics</h1>
-      <p>
-        good {good}<br></br>
-        neutral {neutral}<br></br>
-        bad {bad}
-      </p>
+      
+      good {good}<br></br>
+      neutral {neutral}<br></br>
+      bad {bad}
+      <Statistics
+        good={good}
+        neutral={neutral}
+        bad={bad}
+      />
     </div>
   )
-  
 }
 
 const Button = ({clickHandler, text}) => (
   <button onClick={clickHandler}>{text}</button>
 )
+
+const Statistics =({good, neutral, bad}) => {
+  const all = good + neutral + bad
+  let average = 0
+  let positive = 0
+  if (all != 0) {
+    average = (good - bad) / all
+    positive = good * 100 / all
+  }
+  return (
+    <div>
+      all {all}<br></br>
+      average {average}<br></br>
+      positive {positive} %<br></br>
+    </div>
+  )
+}
 
 export default App;
