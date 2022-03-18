@@ -40,17 +40,19 @@ const Statistics =({good, neutral, bad}) => {
     return <div>No feedback given</div>
   }
   const average = (good - bad) / all
-  const positive = good * 100 / all
+  const positive = (good * 100 / all) + " %"
   return (
     <div>
-      good {good}<br></br>
-      neutral {neutral}<br></br>
-      bad {bad}<br></br>
-      all {all}<br></br>
-      average {average}<br></br>
-      positive {positive} %<br></br>
+      <StatisticLine text="good" value={good}/>
+      <StatisticLine text="neutral" value={neutral}/>
+      <StatisticLine text="bad" value={bad}/>
+      <StatisticLine text="all" value={all}/>
+      <StatisticLine text="average" value={average}/>
+      <StatisticLine text="positive" value={positive}/>
     </div>
   )
 }
+
+const StatisticLine = ({text, value}) => <div>{text} {value}</div>
 
 export default App;
