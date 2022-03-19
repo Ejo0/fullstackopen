@@ -12,18 +12,45 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState(Array(7).fill(0))
 
   const nextAnecdote = () => {
     const random = Math.floor(Math.random() * 7)
     setSelected(random)
   }
 
+  const vote = () => {
+    const helper = [...points]
+    helper[selected] += 1
+    setPoints(helper)
+  }
+
+  const leader = () => {
+    return points.indexOf(Math.max(...points))
+  }
+
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
+      <h1>Anecdote of the day</h1>
+      <Content anecdote={anecdotes[selected]} votes={points[selected]}/>
       <button onClick={nextAnecdote}>next anecdote</button>
+      <button onClick={vote}>vote</button>
+      <h1>Anecdote with most votes</h1>
+      <Content anecdote={anecdotes[leader()]} votes={points[leader()]}/>
     </div>
   )
+}
+
+const Content = ({anecdote, votes}) => (
+  <p>
+    {anecdote}<br></br>
+    <Votes votes={votes}/>
+  </p>
+)
+
+const Votes = ({votes}) => {
+  if (votes === 1) return <span>Has 1 vote</span>
+  return <span>Has {votes} votes</span>
 }
 
 export default App;
