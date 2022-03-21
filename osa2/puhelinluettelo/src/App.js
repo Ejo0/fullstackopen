@@ -42,28 +42,45 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <form>
-        <div>
-          filter shown with <input value={nameFilter} onChange={handleFilterChange}/>
-        </div>
-      </form>
+      <h1>Phonebook</h1>
+      <Filter nameFilter={nameFilter} handler={handleFilterChange}/>
       <h2>Add a new</h2>
-      <form onSubmit={addPerson}>
+      <PersonForm
+        addPerson={addPerson}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}/>
+      <h2>Numbers</h2>
+      <Persons personsToShow={personsToShow}/>
+    </div>
+  )
+}
+
+const Filter = ({nameFilter, handler}) => (
+  <div>
+    filter shown with <input value={nameFilter} onChange={handler}/>
+  </div>
+)
+
+const PersonForm = (props) => (
+  <form onSubmit={props.addPerson}>
         <div>
-          name: <input value={newName} onChange={handleNameChange}/>
+          name: <input value={props.newName} onChange={props.handleNameChange}/>
         </div>
         <div>
-          number: <input value={newNumber} onChange={handleNumberChange}/>
+          number: <input value={props.newNumber} onChange={props.handleNumberChange}/>
         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
-      <h2>Numbers</h2>
-      {personsToShow.map(p => <p key={p.name}>{p.name} {p.number}</p>)}
-    </div>
-  )
-}
+)
+
+const Persons = ({personsToShow}) => (
+  <div>
+    {personsToShow.map(p => <p key={p.name}>{p.name} {p.number}</p>)}
+  </div>
+)
 
 export default App;
