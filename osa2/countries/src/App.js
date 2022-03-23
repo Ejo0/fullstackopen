@@ -23,19 +23,39 @@ const App = () => {
 
   return (
     <div>
-      Find countries: 
-      <input value={countryFilter} onChange={handleFilterChange}/>
-      <CountryList countries={countriesToShow}/>
+      <Content
+        countryFilter={countryFilter}
+        handleFilterChange={handleFilterChange}
+        countries={countriesToShow}
+      />
     </div>
   )
 }
 
-const CountryList = ({countries}) => {
+const Content = ({countryFilter, handleFilterChange, countries}) => {
+  return (
+    <div>
+      Find countries:
+      <input value={countryFilter} onChange={handleFilterChange}/>
+      <CountryList
+        countries={countries}
+        handleFilterChange={handleFilterChange}
+      />
+    </div>
+  )
+}
+
+const CountryList = ({countries, handleFilterChange}) => {
   if (countries.length > 10) return <div>Too many matches, specify another</div>
   if (countries.length === 1) return <CountryView country={countries[0]}/>
   return (
     <div>
-      {countries.map(c => <span key={c.name.common}>{c.name.common}<br></br></span>)}
+      {countries.map(c => (
+        <span key={c.name.common}>{c.name.common}
+          <button value={c.name.common} onClick={handleFilterChange}>show</button>
+          <br></br>
+        </span>
+      ))}
     </div>
   )
 }
