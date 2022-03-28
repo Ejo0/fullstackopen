@@ -30,6 +30,22 @@ const App = () => {
       })
   }
 
+  const deletePerson = (event) => {
+    const id = event.target.value
+    const name = persons.find(p => p.id == id).name
+    if (!(window.confirm(`Delete ${name}?`))) {
+      return
+    }
+    event.preventDefault()
+    personService.del(id)
+      .then(response => {
+        if (response.status === 200) {
+          const testi = persons.filter(p => p.id != id)
+          setPersons(testi)
+        }
+      })
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -51,12 +67,13 @@ const App = () => {
       <h2>Add a new</h2>
       <PersonForm
         addPerson={addPerson}
+        deletePerson={deletePerson}
         newName={newName}
         handleNameChange={handleNameChange}
         newNumber={newNumber}
         handleNumberChange={handleNumberChange}/>
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow}/>
+      <Persons personsToShow={personsToShow} deletePerson={deletePerson}/>
     </div>
   )
 }
@@ -81,9 +98,14 @@ const PersonForm = (props) => (
       </form>
 )
 
-const Persons = ({personsToShow}) => (
+const Persons = ({personsToShow, deletePerson}) => (
   <div>
-    {personsToShow.map(p => <p key={p.name}>{p.name} {p.number}</p>)}
+    {personsToShow.map(p => (
+    <p key={p.name}>
+      <span>{p.name} {p.number} </span>
+      <button onClick={deletePerson} value={p.id}>Delete</button>
+    </p>
+    ))}
   </div>
 )
 
