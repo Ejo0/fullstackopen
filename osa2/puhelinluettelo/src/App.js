@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import personService from "./services/persons"
+import Notification from "./components/Notification";
+import PersonForm from "./components/PersonForm";
+import Filter from "./components/Filter";
+import Persons from "./components/Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
+  const [notifMessage, setNotifMessage] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     personService.getAll()
@@ -28,6 +34,8 @@ const App = () => {
     personService.create(newPerson)
       .then(addedPerson => {
         setPersons(persons.concat(addedPerson))
+        setNotifMessage(`Created ${newName}`)
+        setTimeout(() => setNotifMessage(null), 4000);
         setNewName('')
         setNewNumber('')
       })
@@ -37,9 +45,21 @@ const App = () => {
     personService.update({...current, number:newNumber})
       .then(updated => {
         setPersons(persons.map(p => p.id !== updated.id ? p : updated))
+        setNotifMessage(`Updated ${current.name}'s number to ${newNumber}`)
+        setTimeout(() => setNotifMessage(null), 4000);
         setNewName('')
         setNewNumber('')
       })
+      .catch((error => showError(newName)))
+  }
+
+  const showError = (name) => {
+    setIsError(true)
+        setNotifMessage(`${name} is already removed from the server`)
+        setTimeout(() => {
+          setNotifMessage(null)
+          setIsError(false)
+        }, 4000);
   }
 
   const deletePerson = (event) => {
@@ -54,8 +74,11 @@ const App = () => {
         if (response.status === 200) {
           const testi = persons.filter(p => p.id != id)
           setPersons(testi)
+          setNotifMessage(`Deleted ${name}`)
+          setTimeout(() => setNotifMessage(null), 4000);
         }
       })
+      .catch((error => showError(name)))
   }
 
   const handleNameChange = (event) => {
@@ -75,6 +98,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notifMessage} isError={isError}/>
       <Filter nameFilter={nameFilter} handler={handleFilterChange}/>
       <h2>Add a new</h2>
       <PersonForm
@@ -89,36 +113,5 @@ const App = () => {
     </div>
   )
 }
-
-const Filter = ({nameFilter, handler}) => (
-  <div>
-    filter shown with <input value={nameFilter} onChange={handler}/>
-  </div>
-)
-
-const PersonForm = (props) => (
-  <form onSubmit={props.addPerson}>
-        <div>
-          name: <input value={props.newName} onChange={props.handleNameChange}/>
-        </div>
-        <div>
-          number: <input value={props.newNumber} onChange={props.handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-)
-
-const Persons = ({personsToShow, deletePerson}) => (
-  <div>
-    {personsToShow.map(p => (
-    <p key={p.name}>
-      <span>{p.name} {p.number} </span>
-      <button onClick={deletePerson} value={p.id}>Delete</button>
-    </p>
-    ))}
-  </div>
-)
 
 export default App;
