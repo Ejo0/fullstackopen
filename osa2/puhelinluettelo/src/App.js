@@ -39,6 +39,7 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      .catch((error => showError(`${error}: name or number missing?`)))
   }
 
   const updatePerson = (current) => {
@@ -50,12 +51,13 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-      .catch((error => showError(newName)))
+      .catch((error => showError(error)))
   }
 
-  const showError = (name) => {
+  const showError = (msg) => {
+    console.log(msg)
     setIsError(true)
-        setNotifMessage(`${name} is already removed from the server`)
+        setNotifMessage(String(msg))
         setTimeout(() => {
           setNotifMessage(null)
           setIsError(false)
@@ -63,22 +65,21 @@ const App = () => {
   }
 
   const deletePerson = (event) => {
-    const id = event.target.value
-    const name = persons.find(p => p.id == id).name
+    const id = Number(event.target.value)
+    const name = persons.find(p => p.id === id).name
     if (!(window.confirm(`Delete ${name}?`))) {
       return
     }
     event.preventDefault()
     personService.del(id)
       .then(response => {
-        if (response.status === 200) {
-          const testi = persons.filter(p => p.id != id)
-          setPersons(testi)
+        if (response.status === 204) {
+          setPersons(persons.filter(p => p.id !== id))
           setNotifMessage(`Deleted ${name}`)
           setTimeout(() => setNotifMessage(null), 4000);
         }
       })
-      .catch((error => showError(name)))
+      .catch((error => showError(error)))
   }
 
   const handleNameChange = (event) => {
