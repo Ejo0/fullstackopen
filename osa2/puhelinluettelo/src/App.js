@@ -39,7 +39,9 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-      .catch((error => showError(`${error}: name or number missing?`)))
+      .catch((error => {
+        showError(error.response.data.error)
+      }))
   }
 
   const updatePerson = (current) => {
@@ -51,11 +53,10 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-      .catch((error => showError(error)))
+      .catch((error => showError(error.response.data.error)))
   }
 
   const showError = (msg) => {
-    console.log(msg)
     setIsError(true)
         setNotifMessage(String(msg))
         setTimeout(() => {
@@ -65,7 +66,7 @@ const App = () => {
   }
 
   const deletePerson = (event) => {
-    const id = Number(event.target.value)
+    const id = event.target.value
     const name = persons.find(p => p.id === id).name
     if (!(window.confirm(`Delete ${name}?`))) {
       return

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'https://polar-stream-70002.herokuapp.com/api/persons'
+const baseUrl = '/api/persons'
 
 const create = person => {
     const request = axios.post(baseUrl, person)
