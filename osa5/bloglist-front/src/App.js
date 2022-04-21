@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm"
 import Login from "./components/Login";
+import Notification from "./components/Notification";
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -13,6 +14,8 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [notification, setNotification] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
@@ -36,11 +39,21 @@ const App = () => {
 
       window.localStorage.setItem('blogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
+
+      setNotification(`Logged in ${user.name}`)
+      setTimeout(() => {setNotification(null)}, 4000);
+
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.log('wrong credentials')
+
+      setIsError(true)
+      setNotification('Wrong username or password')
+      setTimeout(() => {
+        setNotification(null)
+        setIsError(false)
+      }, 4000)
     }
   }
 
@@ -58,17 +71,33 @@ const App = () => {
       url: url
     }
 
-    const createdBlog = await blogService.create(newBlog)
-    setBlogs(blogs.concat(createdBlog))
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    try {
+      const createdBlog = await blogService.create(newBlog)
+      setBlogs(blogs.concat(createdBlog))
+  
+      setNotification(`Created new blog '${newBlog.title}' by ${newBlog.author}`)
+      setTimeout(() => setNotification(null), 5000)
+    
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch (exception) {
+
+      setIsError(true)
+      setNotification('Title, author and url required')
+      setTimeout(() => {
+        setNotification(null)
+        setIsError(false)
+      }, 4000)
+    }
+
   }
 
   return (user)
     ? (
     <div>
       <h2>Blogs</h2>
+      <Notification message={notification} isError={isError}/>
       <p>{user.name} logged in <button onClick={handleLogout} >Logout</button></p>
       <h2>Create new</h2>
       <BlogForm 
@@ -89,6 +118,7 @@ const App = () => {
    : (
      <div>
        <h2>Log in to application</h2>
+       <Notification message={notification} isError={isError}/>
        <Login
         handleLogin={handleLogin}
         username={username}

@@ -1,0 +1,18 @@
+.notification, .error {
+    font-weight: 700;
+    font-size: 20px;
+    border-style:dashed;
+    text-align: center;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.notification {
+    color: green;
+    background-color: rgb(156, 255, 126);
+}
+
+.error {
+    color: red;
+    background-color: pink;
+}
