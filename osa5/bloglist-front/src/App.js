@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm"
 import Login from "./components/Login";
 import Notification from "./components/Notification";
+import Togglable from "./components/Togglable";
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [notification, setNotification] = useState(null)
   const [isError, setIsError] = useState(false)
 
@@ -32,10 +28,9 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (credentials) => {
     try {
-      const user = await loginService.login({username, password})
+      const user = await loginService.login(credentials)
 
       window.localStorage.setItem('blogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
@@ -44,8 +39,7 @@ const App = () => {
       setTimeout(() => {setNotification(null)}, 4000);
 
       setUser(user)
-      setUsername('')
-      setPassword('')
+      return true
     } catch (exception) {
 
       setIsError(true)
@@ -54,6 +48,7 @@ const App = () => {
         setNotification(null)
         setIsError(false)
       }, 4000)
+      return false
     }
   }
 
@@ -63,24 +58,16 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreateBlog = async (event) => {
-    event.preventDefault()
-    const newBlog = {
-      title: title,
-      author: author,
-      url: url
-    }
-
+  const handleCreateBlog = async (newBlog) => {
     try {
       const createdBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(createdBlog))
-  
+      blogFormRef.current.toggleVisibility()
+
       setNotification(`Created new blog '${newBlog.title}' by ${newBlog.author}`)
       setTimeout(() => setNotification(null), 5000)
-    
-      setTitle('')
-      setAuthor('')
-      setUrl('')
+      return true
+
     } catch (exception) {
 
       setIsError(true)
@@ -89,9 +76,11 @@ const App = () => {
         setNotification(null)
         setIsError(false)
       }, 4000)
+      return false
     }
-
   }
+
+  const blogFormRef = useRef()
 
   return (user)
     ? (
@@ -100,15 +89,9 @@ const App = () => {
       <Notification message={notification} isError={isError}/>
       <p>{user.name} logged in <button onClick={handleLogout} >Logout</button></p>
       <h2>Create new</h2>
-      <BlogForm 
-        handleCreateBlog={handleCreateBlog}
-        title={title}
-        setTitle={setTitle}
-        author={author}
-        setAuthor={setAuthor}
-        url={url}
-        setUrl={setUrl}
-      />
+      <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
+        <BlogForm handleCreateBlog={handleCreateBlog} />
+      </Togglable>
       <br/>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
@@ -121,10 +104,6 @@ const App = () => {
        <Notification message={notification} isError={isError}/>
        <Login
         handleLogin={handleLogin}
-        username={username}
-        setUsername={setUsername}
-        password={password}
-        setPassword={setPassword}
       />
      </div>
    )

@@ -1,6 +1,23 @@
-const BlogForm = ({handleCreateBlog, title, setTitle, author, setAuthor, url, setUrl}) => (
-    <div>
-        <form onSubmit={handleCreateBlog}>
+import { useState } from "react"
+
+const BlogForm = ({handleCreateBlog}) => {
+    const [title, setTitle] = useState('')
+    const [author, setAuthor] = useState('')
+    const [url, setUrl] = useState('')
+
+    const handleCreate = async (event) => {
+        event.preventDefault()
+        const newBlog = {title, author, url}
+        if (await handleCreateBlog(newBlog)) {
+            setTitle('')
+            setAuthor('')
+            setUrl('')
+        }
+    }
+
+    return (
+        <div>
+        <form onSubmit={handleCreate}>
             <div>
                 <span>Title: </span>
                 <input
@@ -30,7 +47,9 @@ const BlogForm = ({handleCreateBlog, title, setTitle, author, setAuthor, url, se
             </div>
             <button type="submit">Create</button>
         </form>
-    </div>
-)
+        </div>
+    )
+
+}
 
 export default BlogForm
