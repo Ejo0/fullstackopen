@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
-      setBlogs( blogs )
+      setBlogs( blogs.sort((a, b) => b.likes - a.likes))
     })
   }, [])
 
@@ -82,7 +82,31 @@ const App = () => {
 
   const handleLike = async (blog) => {
     const likedBlog = await blogService.like(blog)
-    setBlogs(blogs.map(b => b.id === likedBlog.id ? likedBlog : b))
+    setBlogs(blogs
+              .map(b => b.id === likedBlog.id ? likedBlog : b)
+              .sort((a, b) => b.likes - a.likes))
+  }
+
+  const handleRemove = async (blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      const responseStatus = await blogService.remove(blog)
+      if (responseStatus === 204) {
+        setBlogs(blogs
+                  .filter(b => b.id !== blog.id)
+                  .sort((a, b) => b.likes - a.likes))
+        
+        setNotification('Blog removed')
+        setTimeout(() => setNotification(null), 4000)
+      }
+      if (responseStatus === 401) {
+        setIsError(true)
+        setNotification('Unauthorized')
+        setTimeout(() => {
+          setNotification(null)
+          setIsError(false)
+        }, 4000)
+      }
+    }
   }
 
   const blogFormRef = useRef()
@@ -99,7 +123,12 @@ const App = () => {
       </Togglable>
       <br/>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike={handleLike}/>
+        <Blog
+          key={blog.id}
+          blog={blog}
+          handleLike={handleLike}
+          user={user}
+          handleRemove={handleRemove}/>
       )}
     </div>
   )
