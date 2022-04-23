@@ -1,9 +1,10 @@
 import { useState } from "react"
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLike }) => {
     const [fullView, setFullView] = useState(false)
 
     const toggleFullView = () => setFullView(!fullView)
+    const addLike = () => handleLike(blog)
 
     return (
         <div className="blog">
@@ -14,7 +15,7 @@ const Blog = ({ blog }) => {
                 <div>
                     {blog.url}<br/>
                     Likes: {blog.likes} 
-                    <button>Like</button><br/>
+                    <button onClick={addLike}>Like</button><br/>
                     {blog.user.name}      
                 </div>
             )
