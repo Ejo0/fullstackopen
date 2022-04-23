@@ -16,3 +16,18 @@
     color: red;
     background-color: pink;
 }
+
+.blog {
+    padding-top: 10px;
+    padding-left: 2px;
+    border: solid;
+    border-width: 1px;
+    margin-bottom: 5px;
+}
+
+button {
+    margin: 2px;
+    background-color: white;
+    color: blue;
+    border-width: 1px;
+}
