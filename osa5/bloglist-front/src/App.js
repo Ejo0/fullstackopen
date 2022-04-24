@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
-import Blog from "./components/Blog";
-import BlogForm from "./components/BlogForm"
-import Login from "./components/Login";
-import Notification from "./components/Notification";
-import Togglable from "./components/Togglable";
+import React, { useState, useEffect, useRef } from 'react'
+import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
+import Login from './components/Login'
+import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -36,7 +36,7 @@ const App = () => {
       blogService.setToken(user.token)
 
       setNotification(`Logged in ${user.name}`)
-      setTimeout(() => {setNotification(null)}, 4000);
+      setTimeout(() => {setNotification(null)}, 4000)
 
       setUser(user)
       return true
@@ -83,8 +83,8 @@ const App = () => {
   const handleLike = async (blog) => {
     const likedBlog = await blogService.like(blog)
     setBlogs(blogs
-              .map(b => b.id === likedBlog.id ? likedBlog : b)
-              .sort((a, b) => b.likes - a.likes))
+      .map(b => b.id === likedBlog.id ? likedBlog : b)
+      .sort((a, b) => b.likes - a.likes))
   }
 
   const handleRemove = async (blog) => {
@@ -92,9 +92,9 @@ const App = () => {
       const responseStatus = await blogService.remove(blog)
       if (responseStatus === 204) {
         setBlogs(blogs
-                  .filter(b => b.id !== blog.id)
-                  .sort((a, b) => b.likes - a.likes))
-        
+          .filter(b => b.id !== blog.id)
+          .sort((a, b) => b.likes - a.likes))
+
         setNotification('Blog removed')
         setTimeout(() => setNotification(null), 4000)
       }
@@ -113,35 +113,35 @@ const App = () => {
 
   return (user)
     ? (
-    <div>
-      <h2>Blogs</h2>
-      <Notification message={notification} isError={isError}/>
-      <p>{user.name} logged in <button onClick={handleLogout} >Logout</button></p>
-      <h2>Create new</h2>
-      <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
-        <BlogForm handleCreateBlog={handleCreateBlog} />
-      </Togglable>
-      <br/>
-      {blogs.map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleLike={handleLike}
-          user={user}
-          handleRemove={handleRemove}/>
-      )}
-    </div>
-  )
-   : (
-     <div>
-       <h2>Log in to application</h2>
-       <Notification message={notification} isError={isError}/>
-       <Login
-        handleLogin={handleLogin}
-      />
-     </div>
-   )
+      <div>
+        <h2>Blogs</h2>
+        <Notification message={notification} isError={isError}/>
+        <p>{user.name} logged in <button onClick={handleLogout} >Logout</button></p>
+        <h2>Create new</h2>
+        <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
+          <BlogForm handleCreateBlog={handleCreateBlog} />
+        </Togglable>
+        <br/>
+        {blogs.map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleLike={handleLike}
+            user={user}
+            handleRemove={handleRemove}/>
+        )}
+      </div>
+    )
+    : (
+      <div>
+        <h2>Log in to application</h2>
+        <Notification message={notification} isError={isError}/>
+        <Login
+          handleLogin={handleLogin}
+        />
+      </div>
+    )
 }
 
 
-export default App;
+export default App
