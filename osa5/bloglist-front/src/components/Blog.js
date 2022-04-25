@@ -16,14 +16,14 @@ const Blog = ({ blog, handleLike, user, handleRemove }) => {
         ? (
           <div>
             {blog.url}<br/>
-                        Likes: {blog.likes}
+            Likes: {blog.likes}
             <button onClick={addLike}>Like</button><br/>
             {blog.user.name}<br/>
             {(user.username === blog.user.username)
               ? <button
                 style={{ background: 'red' }}
                 onClick={remove}>
-                                Remove
+                Remove
               </button>
               : null}
           </div>
