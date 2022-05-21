@@ -4,7 +4,6 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
-
 const blog = {
   title: 'hello world',
   author: 'foobar',
@@ -12,8 +11,8 @@ const blog = {
   likes: 3,
   user: {
     name: 'Ada L',
-    username: 'Ada'
-  }
+    username: 'Ada',
+  },
 }
 
 const dummyUser = { username: 'Ada' }
@@ -21,11 +20,13 @@ const dummyFunc = jest.fn()
 let container
 
 beforeEach(() => {
-  container = render(<Blog
-    blog={blog}
-    user={dummyUser}
-    handleLike={dummyFunc}
-    handleRemove={dummyFunc} />
+  container = render(
+    <Blog
+      blog={blog}
+      user={dummyUser}
+      handleLike={dummyFunc}
+      handleRemove={dummyFunc}
+    />
   ).container
 })
 
@@ -47,7 +48,7 @@ test('after clicking "view" renders url and likes', async () => {
   expect(div).toHaveTextContent('Likes: 3')
 })
 
-test('after clicking like-button twise, event handler is called twise',async () => {
+test('after clicking like-button twise, event handler is called twise', async () => {
   const user = userEvent.setup()
   const viewButton = screen.getByText('View')
 

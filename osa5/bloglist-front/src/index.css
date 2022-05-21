@@ -1,32 +1,33 @@
-.notification, .error {
-    font-weight: 700;
-    font-size: 20px;
-    border-style:dashed;
-    text-align: center;
-    padding: 5px;
-    border-radius: 10px;
+.notification,
+.error {
+  font-weight: 700;
+  font-size: 20px;
+  border-style: dashed;
+  text-align: center;
+  padding: 5px;
+  border-radius: 10px;
 }
 
 .notification {
-    color: green;
-    background-color: rgb(156, 255, 126);
+  color: green;
+  background-color: rgb(156, 255, 126);
 }
 
 .error {
-    color: red;
-    background-color: pink;
+  color: red;
+  background-color: pink;
 }
 
 .blog {
-    padding-top: 10px;
-    padding-left: 2px;
-    border: solid;
-    border-width: 1px;
-    margin-bottom: 5px;
+  padding-top: 10px;
+  padding-left: 2px;
+  border: solid;
+  border-width: 1px;
+  margin-bottom: 5px;
 }
 
 button {
-    margin: 2px;
-    background-color: lightblue;
-    border-width: 1px;
+  margin: 2px;
+  background-color: lightblue;
+  border-width: 1px;
 }

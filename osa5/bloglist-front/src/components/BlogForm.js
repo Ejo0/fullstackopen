@@ -25,8 +25,8 @@ const BlogForm = ({ handleCreateBlog }) => {
             type="text"
             value={title}
             name="title"
-            onChange={({ target }) => setTitle(target.value)}>
-          </input>
+            onChange={({ target }) => setTitle(target.value)}
+          ></input>
         </div>
         <div>
           <span>Author: </span>
@@ -34,8 +34,8 @@ const BlogForm = ({ handleCreateBlog }) => {
             type="text"
             value={author}
             name="author"
-            onChange={({ target }) => setAuthor(target.value)}>
-          </input>
+            onChange={({ target }) => setAuthor(target.value)}
+          ></input>
         </div>
         <div>
           <span>Url: </span>
@@ -43,18 +43,19 @@ const BlogForm = ({ handleCreateBlog }) => {
             type="text"
             value={url}
             name="url"
-            onChange={({ target }) => setUrl(target.value)}>
-          </input>
+            onChange={({ target }) => setUrl(target.value)}
+          ></input>
         </div>
-        <button type="submit" name="createblog">Create</button>
+        <button type="submit" name="createblog">
+          Create
+        </button>
       </form>
     </div>
   )
-
 }
 
 BlogForm.porpTypes = {
-  handleCreateBlog: PropTypes.func.isRequired
+  handleCreateBlog: PropTypes.func.isRequired,
 }
 
 export default BlogForm

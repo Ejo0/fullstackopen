@@ -7,7 +7,7 @@ import BlogForm from './BlogForm'
 test('BlogForm create-button calls event-handler with right content', async () => {
   const mockHandler = jest.fn()
 
-  render(<BlogForm handleCreateBlog={mockHandler}/>)
+  render(<BlogForm handleCreateBlog={mockHandler} />)
 
   const user = userEvent.setup()
   const inputs = screen.getAllByRole('textbox')
