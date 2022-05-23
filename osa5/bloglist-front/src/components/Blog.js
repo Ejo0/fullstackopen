@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { remove, like } from '../reducers/blogReducer'
 
-const Blog = ({ blog, handleLike, user, handleRemove }) => {
+const Blog = ({ blog, user }) => {
   const [fullView, setFullView] = useState(false)
-
   const toggleFullView = () => setFullView(!fullView)
-  const addLike = () => handleLike(blog)
-  const remove = () => handleRemove(blog)
+
+  const dispatch = useDispatch()
+  const addLike = () => dispatch(like(blog))
+  const removeBlog = () => dispatch(remove(blog))
 
   return (
     <div className="blog">
@@ -23,7 +26,7 @@ const Blog = ({ blog, handleLike, user, handleRemove }) => {
           {blog.user.name}
           <br />
           {user.username === blog.user.username ? (
-            <button style={{ background: 'red' }} onClick={remove}>
+            <button style={{ background: 'red' }} onClick={removeBlog}>
               Remove
             </button>
           ) : null}
@@ -35,9 +38,7 @@ const Blog = ({ blog, handleLike, user, handleRemove }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  handleLike: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  handleRemove: PropTypes.func.isRequired,
 }
 
 export default Blog

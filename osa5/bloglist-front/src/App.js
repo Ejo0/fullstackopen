@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Login from './components/Login'
 import Notification from './components/Notification'
@@ -8,17 +7,16 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import { useDispatch } from 'react-redux'
 import { showNotification } from './reducers/notificationReducer'
+import BlogList from './components/BlogList'
+import { getBlogs } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      setBlogs(blogs.sort((a, b) => b.likes - a.likes))
-    })
+    dispatch(getBlogs())
   }, [])
 
   useEffect(() => {
@@ -52,51 +50,6 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreateBlog = async (newBlog) => {
-    try {
-      const createdBlog = await blogService.create(newBlog)
-      blogFormRef.current.toggleVisibility()
-      setBlogs(blogs.concat(createdBlog))
-
-      dispatch(
-        showNotification(
-          `Created new blog '${newBlog.title}' by ${newBlog.author}`,
-          5
-        )
-      )
-      return true
-    } catch (exception) {
-      dispatch(showNotification('Title, author and url required', 4, 'error'))
-      return false
-    }
-  }
-
-  const handleLike = async (blog) => {
-    const likedBlog = await blogService.like(blog)
-    setBlogs(
-      blogs
-        .map((b) => (b.id === likedBlog.id ? likedBlog : b))
-        .sort((a, b) => b.likes - a.likes)
-    )
-  }
-
-  const handleRemove = async (blog) => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      const responseStatus = await blogService.remove(blog)
-      if (responseStatus === 204) {
-        setBlogs(
-          blogs
-            .filter((b) => b.id !== blog.id)
-            .sort((a, b) => b.likes - a.likes)
-        )
-        dispatch(showNotification('Blog removed', 4))
-      }
-      if (responseStatus === 401) {
-        dispatch(showNotification('Unauthorized', 4, 'error'))
-      }
-    }
-  }
-
   const blogFormRef = useRef()
 
   return user ? (
@@ -108,18 +61,10 @@ const App = () => {
       </p>
       <h2>Create new</h2>
       <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
-        <BlogForm handleCreateBlog={handleCreateBlog} />
+        <BlogForm blogFormRef={blogFormRef} />
       </Togglable>
       <br />
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleLike={handleLike}
-          user={user}
-          handleRemove={handleRemove}
-        />
-      ))}
+      <BlogList user={user} />
     </div>
   ) : (
     <div>

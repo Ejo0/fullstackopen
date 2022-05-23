@@ -4,7 +4,7 @@ const setNotification = (content, isError) => ({
 })
 
 const remove = () => ({
-  type: 'REMOVE',
+  type: 'REMOVE_NOTIFICATION',
 })
 
 const setTimerId = (timerId) => ({
@@ -25,7 +25,7 @@ const notificationReducer = (
         isError: action.data.isError,
       }
     }
-    case 'REMOVE': {
+    case 'REMOVE_NOTIFICATION': {
       return {
         content: null,
         timerId: null,
