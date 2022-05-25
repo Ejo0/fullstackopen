@@ -16,5 +16,3 @@ const BlogList = () => {
 }
 
 export default BlogList
-
-// Towerz x hi jude -empty spaces

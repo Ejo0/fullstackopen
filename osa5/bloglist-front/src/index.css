@@ -26,6 +26,10 @@
   margin-bottom: 5px;
 }
 
+.menu {
+  background-color: rgb(190, 243, 243);
+}
+
 button {
   margin: 2px;
   background-color: lightblue;

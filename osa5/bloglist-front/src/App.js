@@ -10,8 +10,9 @@ import BlogList from './components/BlogList'
 import Users from './components/Users'
 import User from './components/User'
 import Blog from './components/Blog'
+import Menu from './components/Menu'
 import { getBlogs } from './reducers/blogReducer'
-import { setUser, logoutUser } from './reducers/userReducer'
+import { setUser } from './reducers/userReducer'
 import { getUsers } from './reducers/usersReducer'
 
 const App = () => {
@@ -42,20 +43,13 @@ const App = () => {
     ? blogs.find((u) => u.id === blogMatch.params.id)
     : null
 
-  const handleLogout = async (event) => {
-    event.preventDefault()
-    dispatch(logoutUser())
-  }
-
   const blogFormRef = useRef()
 
   return user ? (
     <div>
+      <Menu user={user} />
       <h2>Blogs</h2>
       <Notification />
-      <p>
-        {user.name} logged in <button onClick={handleLogout}>Logout</button>
-      </p>
       <Routes>
         <Route path="/users/:id" element={<User user={viewedUser} />} />
         <Route
@@ -72,7 +66,6 @@ const App = () => {
           path="/"
           element={
             <div>
-              <h2>Create new</h2>
               <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
                 <BlogForm blogFormRef={blogFormRef} />
               </Togglable>
