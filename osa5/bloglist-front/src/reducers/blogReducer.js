@@ -6,8 +6,8 @@ const setBlogs = (blogs) => ({
   data: blogs,
 })
 
-const addLike = (blog) => ({
-  type: 'LIKE_BLOG',
+const updateBlog = (blog) => ({
+  type: 'UPDATE_BLOG',
   data: blog,
 })
 
@@ -28,9 +28,11 @@ const blogReducer = (state = [], action) => {
     case 'SET_BLOGS': {
       return orderedByLikes(action.data)
     }
-    case 'LIKE_BLOG': {
-      const liked = action.data
-      return orderedByLikes(state.map((b) => (b.id !== liked.id ? b : liked)))
+    case 'UPDATE_BLOG': {
+      const updated = action.data
+      return orderedByLikes(
+        state.map((b) => (b.id !== updated.id ? b : updated))
+      )
     }
     case 'REMOVE_BLOG': {
       const removed = action.data
@@ -54,7 +56,14 @@ export const getBlogs = () => {
 export const like = (blog) => {
   return async (dispatch) => {
     const likedBlog = await blogsService.like(blog)
-    dispatch(addLike(likedBlog))
+    dispatch(updateBlog(likedBlog))
+  }
+}
+
+export const commentBlog = (blog, comment) => {
+  return async (dispatch) => {
+    const commentedBlog = await blogsService.comment(blog, comment)
+    dispatch(updateBlog(commentedBlog))
   }
 }
 
