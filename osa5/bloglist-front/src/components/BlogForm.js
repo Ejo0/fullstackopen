@@ -1,3 +1,4 @@
+import { Button, TextField } from '@mui/material'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { create } from '../reducers/blogReducer'
@@ -24,35 +25,36 @@ const BlogForm = ({ blogFormRef }) => {
     <div>
       <form onSubmit={handleCreate}>
         <div>
-          <span>Title: </span>
-          <input
-            type="text"
+          <TextField
+            label="Title"
             value={title}
             name="title"
             onChange={({ target }) => setTitle(target.value)}
-          ></input>
+            sx={{ paddingBottom: '10px' }}
+          ></TextField>
         </div>
         <div>
-          <span>Author: </span>
-          <input
-            type="text"
+          <TextField
+            label="Author"
             value={author}
             name="author"
             onChange={({ target }) => setAuthor(target.value)}
-          ></input>
+            sx={{ paddingBottom: '10px' }}
+          ></TextField>
         </div>
         <div>
-          <span>Url: </span>
-          <input
-            type="text"
+          <TextField
+            label="Url"
             value={url}
             name="url"
             onChange={({ target }) => setUrl(target.value)}
-          ></input>
+          ></TextField>
         </div>
-        <button type="submit" name="createblog">
-          Create
-        </button>
+        <div>
+          <Button type="submit" name="createblog">
+            Create
+          </Button>
+        </div>
       </form>
     </div>
   )

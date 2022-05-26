@@ -1,3 +1,13 @@
+import {
+  TableContainer,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableHead,
+} from '@mui/material'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -8,23 +18,32 @@ const Users = () => {
 
   return (
     <div>
-      <h2>Users</h2>
-      <table style={{ textAlign: 'left' }}>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>Blogs created</th>
-          </tr>
-          {users.map((u) => (
-            <tr key={u.id}>
-              <th>
-                <Link to={`/users/${u.id}`}>{u.name}</Link>
-              </th>
-              <th>{u.blogs.length}</th>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Typography variant="h2">Users</Typography>
+      <TableContainer component={Paper} style={{ textAlign: 'left' }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Blogs created</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map((u) => (
+              <TableRow key={u.id}>
+                <TableCell>
+                  <Link
+                    to={`/users/${u.id}`}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    {u.name}
+                  </Link>
+                </TableCell>
+                <TableCell>{u.blogs.length}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }

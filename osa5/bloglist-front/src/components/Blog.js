@@ -1,3 +1,11 @@
+import {
+  Button,
+  Link,
+  List,
+  ListItemText,
+  TextField,
+  Typography,
+} from '@mui/material'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -19,34 +27,45 @@ const Blog = ({ blog, user }) => {
 
   return (
     <div>
-      <h2>{blog.title}</h2>
-      <a href={blog.url}>{blog.url}</a>
+      <Typography variant="h2">{blog.title}</Typography>
+      <Typography>
+        Url:{' '}
+        <Link href={blog.url} underline="none">
+          {blog.url}
+        </Link>
+        <br />
+        Likes: {blog.likes}
+        <br />
+        Added by <em>{blog.user.name}</em>
+      </Typography>
       <br />
-      Likes: {blog.likes}
-      <button onClick={addLike}>Like</button>
-      <br />
-      Added by {blog.user.name}
-      <br />
+      <Button variant="outlined" sx={{ mr: 2 }} onClick={addLike}>
+        Like
+      </Button>
       {user.username === blog.user.username ? (
-        <button style={{ background: 'red' }} onClick={removeBlog}>
+        <Button variant="outlined" color="error" onClick={removeBlog}>
           Remove
-        </button>
+        </Button>
       ) : null}
-      <h3>Comments:</h3>
+      <Typography variant="h4" sx={{ mt: 2, mb: 2 }}>
+        Comments:
+      </Typography>
       <form onSubmit={handleComment}>
-        <input
-          type="text"
+        <TextField
+          label="comment"
           name="comment"
           value={comment}
           onChange={({ target }) => setComment(target.value)}
-        ></input>
-        <button type="submit">Add comment</button>
+        ></TextField>
+        <div>
+          <Button type="submit">Add comment</Button>
+        </div>
       </form>
-      <ul>
+      <List>
         {blog.comments.map((c, i) => (
-          <li key={i}>{c}</li>
+          <ListItemText key={i}>{c}</ListItemText>
         ))}
-      </ul>
+      </List>
     </div>
   )
 }

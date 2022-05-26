@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Routes, Route, useMatch, Navigate } from 'react-router-dom'
+import { Container, Typography } from '@mui/material'
 
 import BlogForm from './components/BlogForm'
 import Login from './components/Login'
@@ -45,44 +46,50 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  return user ? (
-    <div>
-      <Menu user={user} />
-      <h2>Blogs</h2>
-      <Notification />
-      <Routes>
-        <Route path="/users/:id" element={<User user={viewedUser} />} />
-        <Route
-          path="/blogs/:id"
-          element={
-            viewedBlog ? (
-              <Blog blog={viewedBlog} user={user} />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        />
-        <Route
-          path="/"
-          element={
-            <div>
-              <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
-                <BlogForm blogFormRef={blogFormRef} />
-              </Togglable>
-              <br />
-              <BlogList user={user} />
-            </div>
-          }
-        />
-        <Route path="/users" element={<Users />} />
-      </Routes>
-    </div>
-  ) : (
-    <div>
-      <h2>Log in to application</h2>
-      <Notification />
-      <Login />
-    </div>
+  return (
+    <Container>
+      {user ? (
+        <div>
+          <Menu user={user} />
+          <Notification />
+          <Routes>
+            <Route path="/users/:id" element={<User user={viewedUser} />} />
+            <Route
+              path="/blogs/:id"
+              element={
+                viewedBlog ? (
+                  <Blog blog={viewedBlog} user={user} />
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/"
+              element={
+                <div>
+                  <Typography variant="h2">Blogs</Typography>
+                  <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
+                    <BlogForm blogFormRef={blogFormRef} />
+                  </Togglable>
+                  <br />
+                  <BlogList user={user} />
+                </div>
+              }
+            />
+            <Route path="/users" element={<Users />} />
+          </Routes>
+        </div>
+      ) : (
+        <div>
+          <Notification />
+          <Typography sx={{ mb: 2 }} variant="h2">
+            Login
+          </Typography>
+          <Login />
+        </div>
+      )}
+    </Container>
   )
 }
 

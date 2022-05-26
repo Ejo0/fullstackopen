@@ -1,3 +1,4 @@
+import { Alert } from '@mui/material'
 import { useSelector } from 'react-redux'
 
 const Notification = () => {
@@ -8,9 +9,13 @@ const Notification = () => {
     }
   })
 
-  const notifType = notif.isError ? 'error' : 'notification'
-  return notif.content === null ? null : (
-    <p className={notifType}>{notif.content}</p>
+  const notifType = notif.isError ? 'error' : 'success'
+  return (
+    <div style={{ height: '60px' }}>
+      {notif.content === null ? null : (
+        <Alert severity={notifType}>{notif.content}</Alert>
+      )}
+    </div>
   )
 }
 
